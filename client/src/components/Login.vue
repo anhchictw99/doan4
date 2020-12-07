@@ -52,18 +52,18 @@
                                 <form @submit.prevent="handleSubmit(fdfdfd)">
                                 <!-- <form action=""> -->
                                     <!-- <input type="text" v-model="relativeName" id="relativeName" placeholder="Name"> -->
-                                    <ValidationProvider name="Name" rules="required|alpha" v-slot="{ errors }">
+                                    <ValidationProvider name="Name" rules="required|" v-slot="{ errors }">
                                         <div class="form-group">
                                             
-                                            <input type="text" class="form-control" id="relativeName" v-model="relativeName">
+                                            <input type="text" class="form-control" id="relativeName" v-model="socialId">
                                             <span>{{ errors[0] }}</span>
                                         </div>
                                     </ValidationProvider>
                                     <!-- <input type="email" v-model="relativeEmail" id="relativeEmail" placeholder="Email"> -->
-                                    <ValidationProvider name="E-Mail" rules="required|email" v-slot="{ errors }">
+                                    <ValidationProvider name="E-Mail" rules="required|" v-slot="{ errors }">
                                       <div class="form-group">
                                   
-                                       <input type="email" class="form-control" id="relativeEmail" v-model="relativeEmail">
+                                       <input type="text" class="form-control" id="relativeEmail" v-model="fullname">
                                        <span>{{ errors[0] }}</span>
                                       </div>
                                     </ValidationProvider>
@@ -137,7 +137,7 @@
 
     <!-- Modal footer -->
    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click.prevent="signUp">Submit</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" >Submit</button>
                     </div>
                 </div>
             </div>
@@ -164,7 +164,7 @@
 
     <!-- Modal footer -->
    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" @click="enterCode">Submit</button>
+                        <button type="button" class="btn btn-danger"  @click="enterCode">Submit</button>
                     </div>
                 </div>
             </div>
@@ -226,7 +226,9 @@ export default {
           phone:'',
           question1:'',
           question2:'',
-          random:''
+          random:'',
+          socialId:'',
+          fullname:''
 
       }
   },
@@ -241,8 +243,8 @@ export default {
       },
        signUpRela(){
           var data = {
-              name: this.relativeName,
-              email: this.relativeEmail,
+              socialId: this.socialId,
+              fullname: this.fullname,
              // userT:this.userT,
               questionare : this.questionare
             
@@ -264,19 +266,17 @@ export default {
       enterCode(){
         //   var data ={ random:this.random}
         //   this.$store.dispatch('enterCode',data)
-        if(this.random == this.token1.random ){
-            if(this.token1.token){
-                this.$router.push('/')
-            }
-            console.log('loi')
+        if(this.random == this.signinrelative){
+            
+                this.$router.push('/consoleRela')  
         }else{
-            console.log('loi')
+             this.$router.push('/login') 
         }
       }
 
   },
   computed:{
-    ...mapState(['authrelative','token1'])
+    ...mapState(['authrelative','token1','signinrelative'])
 
   }
      

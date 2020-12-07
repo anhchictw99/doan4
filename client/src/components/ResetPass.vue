@@ -48,14 +48,16 @@ export default {
     return {
       newPass: "",
       newPass__confirm: "",
-      isCheck:false
+      isCheck:false,
+      //param: this.$router.params.id
     };
   },
   methods: {
     changePass() {
       if (this.newPass == this.newPass__confirm) {
         var data = {
-          newPass: this.newPass
+          newPass: this.newPass,
+          param: this.$route.params.id
         };
         this.$store.dispatch("changePass", data);
       }else{

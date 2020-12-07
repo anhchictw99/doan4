@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StatisticalItem />
+   
     <section class="statistical">
       <div class="statistical__content">
         <h1>Bảng thống kê</h1>
@@ -24,33 +24,11 @@
             <th id="actions">Actions</th>
           </tr>
 
-          <tr>
-            <td>
-              <img src="../../public/img/avatar.png" alt />
-            </td>
-            <td>
-              <p id="customerName">Customer Name</p>
-              <div class="outSide">
-                <div class="inSide"></div>
-              </div>
-            </td>
-            <td>
-              <p>Not pay yet</p>
-            </td>
-            <td>
-              <p id="countWill">1</p>
-            </td>
-            <td>
-              <p id="willPrice">100 $</p>
-            </td>
-            <td>
-              <p id="totalPrice">100$</p>
-            </td>
-            <td>
-              <button class="btn deleteButton action">Delete</button>
-              <button class="btn editButton action">Edit</button>
-            </td>
-          </tr>
+
+          <statistical-item v-for="(user,index) in signStatical" 
+          v-bind:user="user"
+          v-bind:key="index"
+          />
         </table>
       </div>
 
@@ -108,6 +86,7 @@
 
 <script>
 import { mapState } from "vuex";
+import StatisticalItem from './StatisticalItem'
 // import StatisticalItem from "./StatisticalItem";
 export default {
   name: "Statistical",
@@ -139,9 +118,10 @@ export default {
   computed: {
     ...mapState(["signStatical"])
   },
-//   components: {
-//     StatisticalItem
-//   }
+  
+  components: {
+    StatisticalItem
+  }
 };
 </script>
 
@@ -244,7 +224,7 @@ $color-gray-0: #9b9b9b;
           .inSide {
             display: block;
             background-color: #fff;
-            width: 63%;
+            width: 50%;
             height: 100%;
             border: 0;
             border-radius: 5px;

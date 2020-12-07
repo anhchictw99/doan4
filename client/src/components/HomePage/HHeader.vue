@@ -2,22 +2,24 @@
 <div class="HHeader">
   <header>
         <div class="header__content">
+            
             <nav class="navbar navbar-default navbar-expand-lg navbar-fixed-top">
                 <a class="navbar-brand header__left" href="#">
                     <h1>TESTAMENT</h1>
                 </a>
+                
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav">
-                        <li class="nav-item header__middle">
+                        <!-- <li class="nav-item header__middle">
                             <ol>
                                 <li><a href="#">Link 1</a></li>
                                 <li><a href="#">Link 2</a></li>
                                 <li><a href="#">Link 3</a></li>
                             </ol>
-                        </li>
+                        </li> -->
                         <li class="nav-item header__right">
                             <img src="../../../public/img/avatar.png" alt="" />
                             <span style="color:#f9a825">{{signShowstage.result.name}}</span>
@@ -25,7 +27,7 @@
                             <div class="dropdown-content">
                                 <ol>
                                     <li><a href="http://localhost:8080/#/console">Console</a></li>
-                                    <li><a href="#">Profile</a></li>
+                                    <li><a href="http://localhost:8080/#/editUser">Profile</a></li>
                                     <li><a href="#">{{signShowstage.result.state}}</a></li>
                                 </ol>
                             </div>

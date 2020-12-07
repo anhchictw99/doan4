@@ -12,14 +12,11 @@
                 <h3>Would you like us to email you and your two potential witnesses to get the ball rolling?</h3>
                 <p>Optional but recommended. Witnesses should be over the age of 18 and not otherwise named in your
                     will.</p>
-                <!-- <h3>Witnesses 1 Email</h3>
-                <input type="text" name="fd" id="1" placeholder="Email address"> -->
-                
-                
+               
                 <h3>Want to include a custom message?</h3>
-                <textarea type="text" v-model="will"   cols="30" rows="10">  </textarea>
+                <textarea type="text" v-model="signTurnon"   cols="30" rows="10">  </textarea>
                 <div class="btn-group">
-                <a href="#" class="btn btn-primary" @click="consoleWill">CHANGE</a>
+                
                 <a href="#" class="btn btn-default" @click="goHome" >GO TO HOME</a>
                 </div>
            
@@ -48,15 +45,11 @@ export default {
       }
   },
   methods:{
-      consoleWill(){
-          var data= {
-              will: this.signTurn,
-              
-          }
-          this.$store.dispatch('consoleWill',data)
-      },
+     
       goHome(){
-          this.$router.push("/");
+          
+          this.$store.dispatch('relaSeen')
+         
       }
   },
   created: function () {
@@ -64,14 +57,8 @@ export default {
   },
   computed:{
     ...mapState(['signTurnon','signTurn']),
-    will: {
-    get () {
-      return this.$store.state.signTurnon
-    },
-    set (value) {
-      this.$store.commit('TURNWILL', value)
-    }
-  }
+    
+  
 
   }
 

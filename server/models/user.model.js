@@ -13,6 +13,13 @@ const user = mongoose.Schema({
     will:{
         type:String , default:"test"
     },
+    title:{
+        type:String 
+    },
+    price:{
+        type:Number,
+        
+    } , 
     state:{
         type:String,default:"no"
     },
@@ -27,6 +34,10 @@ const user = mongoose.Schema({
     },
     fullname:{
         type:String
+    },
+    quantity:{
+        type:Number,
+        default:1
     },
     random: {type:Number},
     relative:{
@@ -57,9 +68,9 @@ const user = mongoose.Schema({
         },
         month:{
             type:String
-        }
+        },
   
-        
+     
     },
     last_login_date: {
         type: Date,
@@ -102,5 +113,18 @@ user.pre("save", async function(next) {
 //         return next(err);
 //    } 
 // });
-
+// schema.pre("update", function(next) {
+//     const password = this.getUpdate().$set.password;
+//     if (!password) {
+//         return next();
+//     }
+//     try {
+//         const salt = Bcrypt.genSaltSync();
+//         const hash = Bcrypt.hashSync(password, salt);
+//         this.getUpdate().$set.password = hash;
+//         next();
+//     } catch (error) {
+//         return next(error);
+//     }
+// });
 module.exports = mongoose.model('user',user)

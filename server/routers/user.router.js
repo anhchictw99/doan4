@@ -6,6 +6,7 @@ var Admin = require('../models/admin.model')
 var Payment = require('../models/payment.model')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const _= require('lodash')
 const crypto = require('crypto');
 var random = require('random');
 const nodemailer = require('nodemailer');
@@ -72,7 +73,7 @@ router.post('/login',(req,res)=>{
 //       });
 // })
 router.post('/createWill',middlewareJwt,(req,res)=>{
-    var item = {will:req.body.will}
+    var item = {will:req.body.will,title:req.body.title}
 
     // User.updateOne({_id:req.userData.userId},{$set: item},function(err){
     //     if(err){
@@ -112,6 +113,35 @@ router.get('/showWill',middlewareJwt,(req,res)=>{
         return res.status(401).json({err:'fail'})
     }
       
+})
+router.get('/relashowWill',middlewareJwt,(req,res)=>{
+    if(req.userData.role=="user" || req.userData.role=="relative"){
+        const obj ={
+            state: seen
+        }
+        User.findOne({_id:req.userData.userId})
+        
+        .then(result =>{
+            result = _.extend(result,obj);
+            result.save((err,result)=>{
+                if(err){
+                    return res.status(401).json({err:"reset not user"})
+                }
+                res.status(201).json({message:result.will})
+            })
+            
+        })
+        .catch(err=>{
+            console.log(err)
+            res.status(401).json({err})
+        })
+  
+      }else
+      {
+          return res.status(401).json({err:'fail'})
+      }
+        
+    
 })
 router.delete('/showWill/:id',middlewareJwt,(req,res)=>{
     User.findOneAndDelete({_id:req.params.id},(err)=>{
@@ -298,9 +328,12 @@ router.post('/regisRela',middlewareJwt,(req,res)=>{
 })
 router.get('/payment',middlewareJwt, (req, res) => {
    
-    var state = {state:"yes"}
+    
     Admin.findById("5fa426fb59d9167c543d267a")
     .then(resultA=>{
+        var state1 = {state:"yes",price:resultA.price1}
+        var state2 = {state:"yes",price:resultA.price2}
+        var state3 = {state:"yes",price:resultA.price3}
       User.findOne({_id:req.userData.userId}).then(result=>{
            var will = result.will
               console.log(result.username)
@@ -314,7 +347,7 @@ router.get('/payment',middlewareJwt, (req, res) => {
               })
               payment.save()
               .then(kq=>{
-                    User.updateOne({_id:req.userData.userId},{$set: state},function(err){
+                    User.updateOne({_id:req.userData.userId},{$set: state1},function(err){
                         if(err){
                             console.log(err);
                             res.status(401).json({error:'loi'})
@@ -337,7 +370,7 @@ router.get('/payment',middlewareJwt, (req, res) => {
             })
             payment.save()
             .then(kq=>{
-                User.updateOne({_id:req.userData.userId},{$set: state},function(err){
+                User.updateOne({_id:req.userData.userId},{$set: state2},function(err){
                     if(err){
                         console.log(err);
                         res.status(401).json({error:'loi'})
@@ -358,7 +391,7 @@ router.get('/payment',middlewareJwt, (req, res) => {
             })
             payment.save()
             .then(kq=>{
-                User.updateOne({_id:req.userData.userId},{$set: state},function(err){
+                User.updateOne({_id:req.userData.userId},{$set: state3},function(err){
                     if(err){
                         console.log(err);
                         res.status(401).json({error:'loi'})
@@ -472,18 +505,49 @@ router.put('/reset-password',(req,res)=>{
     })
 
 })
-router.put('/changePass',(req,res)=>{
-    var resetLink = req.params.id;
-    var newPass = {password:req.body.newPass}
+// router.put('/changePass',(req,res)=>{
+//     var resetLink = req.params.id;
+//     var newPass = req.body.newPass
     
-        User.updateOne({resetLink:resetLink},{$set:newPass },function(err){
-            if(err){
-                console.log(err);
-                res.status(401).json({error:'loi'})
-            }
-            res.status(201).json({mess:'success'})
-    
-        })
+//         User.find({resetLink:resetLink},(err,user)=>{
+//             if(err || !user){
+//                 return res.status(401).json({err:"fail not user"})
+//             }
+//             const obj ={
+//                 password: req.body.newPass,
+//                 resetLink:''
+//             }
+//             users = _.extend({},user,obj)
+//             console.log(users)
+//             users.save()
+//             .then((err,result)=>{
+//                 if(err){
+//                     return res.status(401).json({err:"reset not user"})
+//                 }else{
+//                     return res.status(201).json({mess:"reset successed"})
+//                 }
+                
+//             })
+//         })
+  
+
+// })
+router.put('/changePass/',async (req,res)=>{
+    var resetLin = req.body.param;
+    var newPass = req.body.newPass
+    const salt = bcrypt.genSaltSync();
+    const hash =await bcrypt.hashSync(newPass, salt);
+    var pass = {password:hash}
+    User.updateOne({resetLink:resetLin},{$set: pass},function(err){
+        if(err){
+            console.log(err);
+            res.status(401).json({error:'loi'})
+        }
+        console.log(hash)
+        res.status(201).json({mess:'success1'})
+
+    })
+   
   
 
 })

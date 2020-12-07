@@ -44,7 +44,8 @@ export default new Vuex.Store({
         signTurnphone:'',
         signButtonuser:'',
         signResetpass:'',
-        signChangepass:''
+        signChangepass:'',
+        signRelaseen:''
 
 
 
@@ -130,12 +131,12 @@ export default new Vuex.Store({
             axios.
                 post('http://localhost:3000/relative/login', data)
                 .then(result => {
-                    let data = {token:result.data.token,random:result.data.random}
+                    //let data = {token:result.data.token,random:result.data.random}
                     if (data) {
-                        localStorage.setItem("token", data.token);
+                        localStorage.setItem("token", result.data.token);
 
                         console.log(result)
-                        commit('SIGNINRELATIVE', data)
+                        commit('SIGNINRELATIVE', result.data.random)
                         console.log('chan')
                         
 
@@ -180,7 +181,7 @@ export default new Vuex.Store({
                 .then(err => { console.log(err) })
         },
         createWill({ commit }, data) {
-            axios.post('http://localhost:3000/user/createWill', { will: data.will }, { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
+            axios.post('http://localhost:3000/user/createWill', data, { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
                 .then(result => {
                     let message = result.data.message
                     let err = result.data.err
@@ -309,12 +310,12 @@ export default new Vuex.Store({
 
                         commit('REGISRELA', mess)
                        
-                        Swal.fire(
-                            'Good job!',
-                            'bạn đã tạo di chúc công, bạn có muốn thanh toán luôn không ?',
-                            'success'
-                        )
-                        router.push("/");
+                        // Swal.fire(
+                        //     'Good job!',
+                        //     'bạn đã tạo di chúc công, bạn có muốn thanh toán luôn không ?',
+                        //     'success'
+                        // )
+                        router.push("/login");
 
 
                 }).catch(err => {
@@ -430,6 +431,7 @@ export default new Vuex.Store({
             axios
                 .post('http://localhost:3000/admin/login', data)
                 .then(result => {
+                    localStorage.setItem("token", result.data.token);
 
 
 
@@ -467,7 +469,7 @@ export default new Vuex.Store({
             axios
                 .get('http://localhost:3000/admin/statical')
                 .then(result => {
-                    var mess = result.data
+                    var mess = result.data.users
                   
 
                     commit('STATICAL', mess)
@@ -540,7 +542,7 @@ export default new Vuex.Store({
         },
         changePass({ commit },data) {
             axios
-                .put('http://localhost:3000/user/changePass',data)
+                .put('http://localhost:3000/user/changePass/',data)
                 .then(result => {
                     var mess = result.data.mess
                     Swal.fire(
@@ -560,6 +562,18 @@ export default new Vuex.Store({
                         'error'
                     )
                     console.log(err)})
+        },
+        relaSeen({ commit }) {
+            axios
+                .get('http://localhost:3000/relative/relaSeen', { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
+                .then(result => {
+                    console.log(result)
+                    localStorage.removeItem("token");
+                    commit('RELASEEN', { result: result.data.mess })
+                    router.push("/login");
+
+                })
+                .catch(err => console.log(err))
         },
         
 
@@ -582,7 +596,7 @@ export default new Vuex.Store({
             state.kq = kq;
         },
         SIGNINRELATIVE(state, data) {
-            state.token1 = data
+            state.signinrelative = data
         },
         AUTHRELATIVE(state, p) {
             state.authrelative = p;
@@ -665,6 +679,9 @@ export default new Vuex.Store({
         },
         CHANGEPASS(state, data) {
             state.signChangepass = data
+        },
+        RELASEEN(state, data) {
+            state.signRelaseen = data
         },
 
 

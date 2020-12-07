@@ -12,10 +12,10 @@
                 <h3>Would you like us to email you and your two potential witnesses to get the ball rolling?</h3>
                 <p>Optional but recommended. Witnesses should be over the age of 18 and not otherwise named in your
                     will.</p>
-                <h3>Witnesses 1 Email</h3>
-                <input type="text" name="fd" id="1" placeholder="Email address">
-                <h3>Witnesses 2 Email</h3>
-                <input type="text" name="fdfd" id="2" placeholder="Email address">
+                <!-- <h3>Witnesses 1 Email</h3>
+                <input type="text" name="fd" id="1" placeholder="Email address"> -->
+                <h3>Title</h3>
+                <input type="text" v-model="title" id="2" placeholder="Title...">
                 <h3>Want to include a custom message?</h3>
                 <textarea type="text" v-model="will"  cols="30" rows="10"></textarea>
                 <div class="btn-group">
@@ -42,6 +42,7 @@ export default {
           
          
           will:'',
+          title:''
           
 
       }
@@ -50,6 +51,7 @@ export default {
       createWill(){
           var data= {
               will: this.will,
+              title:this.title
               
           }
           this.$store.dispatch('createWill',data)

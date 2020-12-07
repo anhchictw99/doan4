@@ -7,7 +7,7 @@ var User = require('../models/user.model');
 var Payment = require('../models/payment.model');
 const bcrypt = require('bcrypt');
 router.get('/showcheckOut', middlewareJwt, (req, res) => {
-  Payment.aggregate([
+  User.aggregate([
     {
       $group: {
         _id: null,
@@ -15,6 +15,18 @@ router.get('/showcheckOut', middlewareJwt, (req, res) => {
         totalQuan: { $sum: "$quantity" }
       }
     }
+  ]).then(kq => {
+    console.log(kq);
+    return res.status(201).json({ kq })
+  })
+    .catch(err => { console.log(err) })
+
+
+
+})
+router.get('/checkOutState', middlewareJwt, (req, res) => {
+  User.aggregate([
+    { $match : { state : "yes" } }
   ]).then(kq => {
     console.log(kq);
     return res.status(201).json({ kq })
@@ -32,13 +44,14 @@ router.get('/statical', (req, res) => {
         users: users.map((user) => {
 
           return {
-            date : new Date(user.last_login_date).getTime(),
+            //date : new Date(user.last_login_date).getTime(),
             last: ((new Date(user.last_login_date).getTime() + 180000 - new Date()) / 180000) * 100,
             price: user.price,
             username: user.username,
-            loginUser : user.last_login_date,
+            //loginUser : user.last_login_date,
+            state:user.state,
         
-            date1 : new Date().getTime()
+           // date1 : new Date().getTime()
             //newDate : date.getTime()
             // other property
           }

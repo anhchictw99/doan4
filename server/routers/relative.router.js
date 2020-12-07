@@ -5,6 +5,7 @@ var User = require('../models/user.model');
 var Relative = require('../models/relative.model');
 const jwt = require("jsonwebtoken");
 var middlewareJwt = require('../middlewares/jwt.middleware')
+const nodemailer = require('nodemailer');
 var random = require('random');
 router.get('/api',(req,res)=>{
     var x = {mess:"chan"}
@@ -21,42 +22,14 @@ router.get('/api',(req,res)=>{
 //         res.status(201).json({message:result})
 //     })
 // })
-// router.post('/checkRelative',(req,res)=>{
-//     var relative = new Relative({
-//         name: req.body.name,
-//         email: req.body.email
-//     })
-//     relative.save()
-//     .then(result =>{
-//         console.log(result)
-//         User.findOne({username:req.body.userT})
-//         .then(kq=>{
-//             var random1 = {random:random.int(0, 100)}
-//             if(kq){
-//                 if(kq.question1 == req.body.questionare || kq.question2 == req.body.questionare || kq.question3 == req.body.questionare){
-//                     Relative.updateOne({email:result.email},{$set:random1},function(err){
-//                         if(err){
-//                             console.log(err);
-//                         }else{
-//                             res.status(201).json({message:'thanh cong checkRelative'})
-//                         }
-//                     })
-//                 }
-//             }
-//         }).catch(err=>{console.log(err);
-//             res.status(401).json({message:'loi phan checkRelative'})
-//         })
-//         res.status(201).json({message:result})
-//     })
-// })
 router.post('/login',(req,res)=>{
     
-        User.findOne({'relative.email':req.body.emailRela})
+        User.findOne({'relative.socialId':req.body.socialId})
         .then(kq=>{
-            
-            
-                if(kq.relative.question1 == req.body.questionare || kq.relative.question2 == req.body.questionare || kq.relative.question3 == req.body.questionare){       
-                                var rand = random.int(min = 1000, max = 9999)
+            var email =kq.relative.email;
+            if(kq.username = req.body.fullname){
+                if(kq.relative.question1 == req.body.questionare || kq.relative.question2 == req.body.questionare || kq.relative.question3 == req.body.questionare){
+                    var rand = random.int(min = 1000, max = 9999)
                                 // User.updateOne({_id:req.userData.userId},{$set: item},function(err){
                                 //     if(err){
                                 //       console.log(err);
@@ -79,7 +52,7 @@ router.post('/login',(req,res)=>{
                                 // Step 2
                                 let mailOptions = {
                                     from: process.env.EMAIL, // TODO: email sender
-                                    to: kq.relative.email, // TODO: email receiver
+                                    to: email, // TODO: email receiver
                                     subject: 'CODE',
                                     text: rand
                                 };
@@ -111,24 +84,32 @@ router.post('/login',(req,res)=>{
                                     token: token,
                                     random:rand
                                   });
-                               
-
-
-                            
-                        
-                            
-                        //   res.status(201).json({message:'thanh cong checkRelative'})
-                  
+                                 // res.status(201).json({message:'thanh cong checkRelative'})
+                }else{
+                    res.status(401).json({message:'that bai'})
                 }
-                else{
-                    console.log('err')
-                }
+            }
+            
             
         }).catch(err=>{console.log(err);
-           return  res.status(401).json({message:'loi phan checkRelative'})
-        })
-        
+            res.status(401).json({message:'loi phan checkRelative'})
+        })  
+})
+router.get('/relaSeen',middlewareJwt,(req,res)=>{
+    var data = {state:'seen'}
+    
+    User.updateOne({_id:req.userData.userId},{$set:data},function(err){
+        if(err){
+            console.log(err);
+          return  res.status(401).json({err})
+          }else{
+            //console.log('conco')
+            return  res.status(201).json({mess:'thanhcong'})
+          }
+                
+         
     })
+})
 
 // router.post('/authRelative',middlewareJwt,(req,res)=>{
 
@@ -146,9 +127,9 @@ router.post('/login',(req,res)=>{
 //     })
 // })
 // router.post('/checkQuestionare',(req,res)=>{
-//     User.findOne({username:req.body.userT})
+//     User.findOne({'relative.socialId':req.body.socialId})
 //     .then(kq=>{
-//        if(kq.question1 == req.body.questionare || kq.question2 == req.body.questionare || kq.question3 == req.body.questionare) {
+//        if(kq.relative.question1 == req.body.questionare || kq.relative.question2 == req.body.questionare || kq.relative.question3 == req.body.questionare) {
 //         var relative = new Relative({
 //             email: req.body.email,
 //             name: req.body.name,
