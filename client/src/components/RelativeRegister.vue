@@ -156,7 +156,8 @@ export default {
 			question3:this.question3,
 			month:this.picked
 		}
-        this.$store.dispatch('regisRela',data)
+		this.$store.dispatch('regisRela',data)
+		//this.$router.push("/login");
 		},
 		homeRela(){
 			this.$router.push('/userRegister')

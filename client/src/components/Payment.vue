@@ -3,10 +3,40 @@
     <div class="payment">
         <div class="payment__content row">
             <div class="payment__col payment__left__col text-left col-8">
-                <div class="userWill">
-                    <p> {{signpayment.result.will}}</p>
+                    <div class="userWill">
+                        <div class="willHeader">
+                            <h1>THE WILL</h1>
+                            <h3>Last Will and Testament of <span class="userName">userName</span>.</h3>
+                        </div>
+                        <div class="willBody">
+                            <div class="bodyContent">
+                                <p>Location, day, month, year.</p>
 
-                </div>
+                                <p>My name is <b class="userName">{{signpayment.result.payment.fullname}}</b>,</p>
+                                <p >Security social number: <b class="font-weight-bold">{{signpayment.result.payment.socialId}}</b>, being of sound mind and memory, do
+                                    hereby make, publish and declare the following instrument as my Last Will and
+                                    Testament.
+                                </p>
+
+                                <b>Content of userWill.</b>
+
+                                <p><b>Final Arrangements</b></p>
+                                <p>User's wishes for final resting place or arrangements: ...</p>
+                                <p>Kind of ceremony: ...</p>
+
+                                <b>Witness: {{signpayment.result.will}}</b>
+                                <div class="bodyFooter">
+                                    <p>IN WITNESS WHEREOF, I have hereunto subscribed my name and affixed my seal this
+                                        _____
+                                        day
+                                        of _____________________, 20__.</p>
+                                    <i class="fa fa-signature"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+               
             </div>
             <div class="payment__col payment__right__col col-4">
                 <div class="payment__table">
@@ -91,7 +121,7 @@ $color-orange-0: #f9a825;
 .payment {
     .payment__content {
         .payment__left__col {
-            background-image: url(./../../public/img/anh-nen-toi-hoa-van-cho-dien-thoai_101025691.jpg);
+            background-image: url(../../public/img/anh-nen-toi-hoa-van-cho-dien-thoai_101025691.jpg);
             padding: 100px 150px;
 
             .userWill {

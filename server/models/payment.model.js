@@ -4,7 +4,9 @@ const payment = mongoose.Schema({
     
     name: String,
    quantity:Number,
-   price:Number
+   price:Number,
+   socialId:Number,
+   fullname:String
     
    
 

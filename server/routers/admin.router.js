@@ -24,12 +24,12 @@ router.get('/showcheckOut', middlewareJwt, (req, res) => {
 
 
 })
-router.get('/checkOutState', middlewareJwt, (req, res) => {
+router.get('/sortState', middlewareJwt, (req, res) => {
   User.aggregate([
     { $match : { state : "yes" } }
   ]).then(kq => {
     console.log(kq);
-    return res.status(201).json({ kq })
+    return res.status(201).json({ kq:kq })
   })
     .catch(err => { console.log(err) })
 
@@ -48,6 +48,7 @@ router.get('/statical', (req, res) => {
             last: ((new Date(user.last_login_date).getTime() + 180000 - new Date()) / 180000) * 100,
             price: user.price,
             username: user.username,
+            userId: user._id,
             //loginUser : user.last_login_date,
             state:user.state,
         
@@ -127,20 +128,20 @@ router.delete('/del/:id', middlewareJwt, (req, res) => {
   //     }
   //     return res.status(201).json({message:'success'});
   // })
-
-  if (req.userData.role == 'admin') {
-    Payment.findOneAndDelete({ _id: req.params.id }, (err) => {
+    var id = req.params.id
+ 
+    User.findByIdAndDelete(id, (err,docs) => {
       if (err) {
-        c
+        
         console.log(err)
         res.status(401).json({ err: 'fail' })
+      }else{
+        return res.status(201).json({ message: 'success' })
       }
-      return res.status(201).json({ message: 'success' })
+      
 
     })
-  } else {
-    res.status(401).json({ err: 'fail' })
-  }
+
 
 })
 //router moi

@@ -24,7 +24,7 @@
       <p id="totalPrice">{{user.price}}$</p>
     </td>
     <td>
-      <button id="deleteButton" class="btn deleteButton action">Delete</button>
+      <button id="deleteButton" class="btn deleteButton action" @click.prevent="deleteUser(user.userId)">Delete</button>
       <button id="editButton" class="btn editButton action">Edit</button>
     </td>
   </tr>
@@ -55,7 +55,12 @@ export default {
           vm.completed = true;
         }
       }, tempo);
-    }
+	},
+	deleteUser(id){
+		var data = {id:id}
+		this.$emit('delUser',data)
+		this.$store.dispatch('deleteUser',data)
+	}
   },
   computed: {
     progresser: function() {

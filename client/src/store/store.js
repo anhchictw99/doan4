@@ -32,6 +32,7 @@ export default new Vuex.Store({
         signShowstage: '',
         //Console.vue
         signTurnon: '',
+        signTurnon1:'',
         signConsolewill: '',
         signTurn: '',
         signLoginadmin: '',
@@ -45,7 +46,9 @@ export default new Vuex.Store({
         signButtonuser:'',
         signResetpass:'',
         signChangepass:'',
-        signRelaseen:''
+        signRelaseen:'',
+        signDeleteuser:'',
+       // signSortstate:''
 
 
 
@@ -310,12 +313,12 @@ export default new Vuex.Store({
 
                         commit('REGISRELA', mess)
                        
-                        // Swal.fire(
-                        //     'Good job!',
-                        //     'bạn đã tạo di chúc công, bạn có muốn thanh toán luôn không ?',
-                        //     'success'
-                        // )
-                        router.push("/login");
+                        Swal.fire(
+                            'Good job!',
+                            'bạn đã tạo di chúc công, bạn có muốn thanh toán luôn không ?',
+                            'success'
+                        )
+                        router.push("/");
 
 
                 }).catch(err => {
@@ -403,10 +406,22 @@ export default new Vuex.Store({
             axios
                 .get('http://localhost:3000/user/turnonWill', { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
                 .then(result => {
-                    var mess = result.data.will
+                    var mess = result.data
                     console.log(result)
 
                     commit('TURNONWILL', mess)
+
+                })
+                .catch(err => console.log(err))
+        },
+        turnonWill1({ commit }) {
+            axios
+                .get('http://localhost:3000/user/turnonWill1', { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
+                .then(result => {
+                    var mess = result.data
+                    console.log(result)
+
+                    commit('TURNONWILL1', mess)
 
                 })
                 .catch(err => console.log(err))
@@ -575,6 +590,37 @@ export default new Vuex.Store({
                 })
                 .catch(err => console.log(err))
         },
+        deleteUser({ commit },data) {
+            axios
+                .delete('http://localhost:3000/admin/del/'+data.id,{ headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
+                .then(result => {
+                    console.log(result)
+                   
+                    commit('DELETEUSER', { result: result.data.mess })
+                    
+
+                })
+                .catch(err => console.log(err))
+        },
+        // sortState({ commit }) {
+        //     axios
+        //         .get('http://localhost:3000/admin/sortState', { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
+        //         .then(result => {
+        //             console.log(result)
+
+        //             commit('SORTSTATE', { result: result.data.kq })
+
+        //         })
+        //         .catch(err => console.log(err))
+        // },
+        sortState({ commit }) {
+            
+
+                    commit('SORTSTATE')
+
+               
+        },
+        
         
 
 
@@ -638,6 +684,9 @@ export default new Vuex.Store({
         TURNONWILL(state, data) {
             state.signTurnon = data
         },
+        TURNONWILL1(state, data) {
+            state.signTurnon1 = data
+        },
         TURNWILL(state, data) {
             state.signTurn = data
         },
@@ -682,6 +731,14 @@ export default new Vuex.Store({
         },
         RELASEEN(state, data) {
             state.signRelaseen = data
+        },
+        DELETEUSER(state, data) {
+            state.signDeleteuser = data
+        },
+        SORTSTATE(state) {
+            
+            var signSort = state.signStatical.filter( item => item.state == 'yes'|| item.state =='seen')
+            state.signStatical = signSort
         },
 
 

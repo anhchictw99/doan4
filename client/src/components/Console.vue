@@ -14,8 +14,8 @@
                     will.</p>
                 <!-- <h3>Witnesses 1 Email</h3>
                 <input type="text" name="fd" id="1" placeholder="Email address"> -->
-                
-                
+                <h3>Title</h3>
+                <input type="text" name="fdfd" id="2" placeholder="Email address">
                 <h3>Want to include a custom message?</h3>
                 <textarea type="text" v-model="will"   cols="30" rows="10">  </textarea>
                 <div class="btn-group">
@@ -66,7 +66,7 @@ export default {
     ...mapState(['signTurnon','signTurn']),
     will: {
     get () {
-      return this.$store.state.signTurnon
+      return this.$store.state.signTurnon.will
     },
     set (value) {
       this.$store.commit('TURNWILL', value)

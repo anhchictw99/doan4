@@ -55,7 +55,7 @@
                                     <ValidationProvider name="Name" rules="required|" v-slot="{ errors }">
                                         <div class="form-group">
                                             
-                                            <input type="text" class="form-control" id="relativeName" v-model="socialId">
+                                            <input type="text" class="form-control" id="relativeName" v-model="socialId" placeholder="relative socialId ...">
                                             <span>{{ errors[0] }}</span>
                                         </div>
                                     </ValidationProvider>
@@ -63,7 +63,7 @@
                                     <ValidationProvider name="E-Mail" rules="required|" v-slot="{ errors }">
                                       <div class="form-group">
                                   
-                                       <input type="text" class="form-control" id="relativeEmail" v-model="fullname">
+                                       <input type="text" class="form-control" id="relativeEmail" v-model="fullname" placeholder="relative name ...">
                                        <span>{{ errors[0] }}</span>
                                       </div>
                                     </ValidationProvider>
@@ -137,7 +137,7 @@
 
     <!-- Modal footer -->
    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" >Submit</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"  >Submit</button>
                     </div>
                 </div>
             </div>

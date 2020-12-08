@@ -7,7 +7,7 @@ var Payment = require('../models/payment.model')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const _= require('lodash')
-const crypto = require('crypto');
+const crypto = require('crypto-js');
 var random = require('random');
 const nodemailer = require('nodemailer');
 var middlewareJwt = require('../middlewares/jwt.middleware')
@@ -75,6 +75,10 @@ router.post('/login',(req,res)=>{
 router.post('/createWill',middlewareJwt,(req,res)=>{
     var item = {will:req.body.will,title:req.body.title}
 
+    var message = crypto.AES.encrypt(item.will, process.env.CRYPTO).toString();
+    // Xem chuỗi đã mã hóa
+    console.log(message);
+    var itemHash = {will:message}
     // User.updateOne({_id:req.userData.userId},{$set: item},function(err){
     //     if(err){
     //       console.log(err);
@@ -84,7 +88,7 @@ router.post('/createWill',middlewareJwt,(req,res)=>{
     //     return  res.status(201).json({message:'success'})
           
     //   })
-    User.updateOne({_id:req.userData.userId},{$set: item},function(err){
+    User.updateOne({_id:req.userData.userId},{$set: itemHash},function(err){
             if(err){
               console.log(err);
             return  res.status(401).json({err})
@@ -101,7 +105,11 @@ router.get('/showWill',middlewareJwt,(req,res)=>{
         User.findOne({_id:req.userData.userId})
       .then(result =>{
           console.log(result)
-          res.status(201).json({message:result.will})
+          // Lấy danh sách byte đã mã hóa
+          var bytes = crypto.AES.decrypt(result.will, process.env.CRYPTO);
+          // Chuyển sang chuỗi gốc
+            var message_decode = bytes.toString(crypto.enc.Utf8);
+          res.status(201).json({message:message_decode})
       })
       .catch(err=>{
           console.log(err)
@@ -275,6 +283,7 @@ router.post('/register',(req,res)=>{
         socialId:req.body.socialId,
         email: req.body.email,
         phone:req.body.phone,
+        fullname:req.body.fullName
         
 
        
@@ -335,14 +344,20 @@ router.get('/payment',middlewareJwt, (req, res) => {
         var state2 = {state:"yes",price:resultA.price2}
         var state3 = {state:"yes",price:resultA.price3}
       User.findOne({_id:req.userData.userId}).then(result=>{
-           var will = result.will
+          // Lấy danh sách byte đã mã hóa
+          var bytes = crypto.AES.decrypt(result.will, process.env.CRYPTO);
+          // Chuyển sang chuỗi gốc
+            var message_decode = bytes.toString(crypto.enc.Utf8);
+           var will = message_decode
               console.log(result.username)
           if(result.month=="month3"){
               
               var payment = new Payment({
                   name:result.username,
                   price:resultA.price1,
-                  userId:result._id
+                  userId:result._id,
+                  socialId:result.socialId,
+                  fullname:result.fullname
                  
               })
               payment.save()
@@ -365,7 +380,9 @@ router.get('/payment',middlewareJwt, (req, res) => {
           else if(result.month=="month6"){
             var payment = new Payment({
                 name:result.username,
-                price:resultA.price2
+                price:resultA.price2,
+                socialId:result.socialId,
+                fullname:result.fullname
                
             })
             payment.save()
@@ -386,7 +403,9 @@ router.get('/payment',middlewareJwt, (req, res) => {
           else if(result.month="year1"){
             var payment = new Payment({
                 name:result.username,
-                price:resultA.price3
+                price:resultA.price3,
+                socialId:result.socialId,
+                fullname:result.fullname
                
             })
             payment.save()
@@ -605,7 +624,33 @@ router.get('/turnonWill',middlewareJwt,(req,res)=>{
 
     User.findOne({_id:req.userData.userId})
     .then(result=>{
-        res.status(201).json({will:result.will})
+        // Lấy danh sách byte đã mã hóa
+        var bytes = crypto.AES.decrypt(result.will, process.env.CRYPTO);
+        // Chuyển sang chuỗi gốc
+          var message_decode = bytes.toString(crypto.enc.Utf8);
+          var data = { will:message_decode,fullname:result.fullname,socialId:result.socialId}
+        res.status(201).json(data)
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(401).json(err)
+    })
+})
+router.get('/turnonWill1',middlewareJwt,(req,res)=>{
+ 
+    User.findOne({_id:req.userData.userId})
+    .then(result=>{
+        if(result.state =='yes'){
+            // Lấy danh sách byte đã mã hóa
+        var bytes = crypto.AES.decrypt(result.will, process.env.CRYPTO);
+        // Chuyển sang chuỗi gốc
+          var message_decode = bytes.toString(crypto.enc.Utf8);
+          var data = { will:message_decode,fullname:result.fullname,socialId:result.socialId}
+        res.status(201).json(data)
+        }else{
+            res.status(401).json({err:'err login relat'})
+        }
+        
     })
     .catch((err)=>{
         console.log(err)
@@ -627,8 +672,10 @@ router.get('/editUser',middlewareJwt,(req,res)=>{
 router.post('/editButtonUser',middlewareJwt,async(req,res)=>{
    
  
-        
-    var data= {username:req.body.username,password:req.body.password,socialId:req.body.socialId,email:req.body.email,phone:req.body.phone}
+    const salt = bcrypt.genSaltSync();
+    const hash =await bcrypt.hashSync(newPass, salt);
+   
+    var data= {username:req.body.username,password:hash,socialId:req.body.socialId,email:req.body.email,phone:req.body.phone}
     User.updateOne({_id:req.userData.userId},{$set:data},function(err){
         if(err){
             console.log(err);

@@ -85,6 +85,7 @@ export default {
         socialId: this.signTurnsocialId,
         email: this.signTurnemail,
         phone: this.signTurnphone,
+        
       };
       this.$store.dispatch("editButtonUser", data);
     }

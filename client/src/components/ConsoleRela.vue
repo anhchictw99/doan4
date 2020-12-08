@@ -1,33 +1,50 @@
+nhap 2
 <template>
 <div class="Witnesses">
-    <div class="Will">
-    <section class="yourWill">
-        <div class="yourWill__content text-center">
-         <div class="forthPage yourWillPage">
-                <h1>Witnesses</h1>
-                <p>After you finish filling out your will, we will email you the steps to make it legally binding.
-                    One of those steps is to sign the printed document and have it witnessed by two people and
-                    notarized if you choose.</p>
-                <hr>
-                <h3>Would you like us to email you and your two potential witnesses to get the ball rolling?</h3>
-                <p>Optional but recommended. Witnesses should be over the age of 18 and not otherwise named in your
-                    will.</p>
-               
-                <h3>Want to include a custom message?</h3>
-                <textarea type="text" v-model="signTurnon"   cols="30" rows="10">  </textarea>
-                <div class="btn-group">
+       <div class="payment">
+            <div class="payment__content container">
+                <div class="payment__col text-left payment__left__col">
+                    <div class="userWill">
+                        <div class="willHeader">
+                            <h1>THE WILL</h1>
+                            <h3>Last Will and Testament of <span class="userName">userName</span>.</h3>
+                        </div>
+                        <div class="willBody">
+                            <div class="bodyContent">
+                                <p>Location, day, month, year.</p>
+
+                                <p>My name is <b class="userName">{{signTurnon1.fullname}}</b>,</p>
+                                <p>Security social number: <b class="font-weight-bold"> {{signTurnon1.socialId}}</b>, being of sound mind and memory, do
+                                    hereby make, publish and declare the following instrument as my Last Will and
+                                    Testament.
+                                </p>
+
+                                <b>Content of userWill.</b>
+
+                                <p><b>Final Arrangements</b></p>
+                                <p>User's wishes for final resting place or arrangements: ...</p>
+                                <p>Kind of ceremony: ...</p>
+
+                                <b>Witness: {{signTurnon1.will}}</b>
+                                <div class="bodyFooter">
+                                    <p>IN WITNESS WHEREOF, I have hereunto subscribed my name and affixed my seal this
+                                        _____
+                                        day
+                                        of _____________________, 20__.</p>
+                                    <i class="fa fa-signature"></i>
+                                                    <div class="btn-group">
                 
-                <a href="#" class="btn btn-default" @click="goHome" >GO TO HOME</a>
+                                    <a href="#" class="btn btn-default" @click="goHome" >GO TO HOME</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-           
-            
-          </div>
+            </div>
         </div>
-    </section>
-    </div>
 </div>
 </template>
-
 <script>
 import {mapState} from 'vuex'
 export default {
@@ -53,10 +70,10 @@ export default {
       }
   },
   created: function () {
-    this.$store.dispatch('turnonWill')
+    this.$store.dispatch('turnonWill1')
   },
   computed:{
-    ...mapState(['signTurnon','signTurn']),
+    ...mapState(['signTurnon1','signTurn']),
     
   
 
@@ -65,15 +82,9 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style lang="scss" scoped>
-@mixin colorSection {
-    display: block;
-    width: 100%;
-    height: 40px;
-    background-color: $color-orange-0;
-}
+$color-orange-0: #f9a825;
 
 @mixin yourWillh1 {
     margin: 0px 0px 24px;
@@ -82,13 +93,6 @@ export default {
     line-height: 48px;
     font-weight: bold;
     letter-spacing: 0.5px;
-}
-
-@mixin yourWillp {
-    margin: 0px 0px 24px;
-    text-align: center;
-    font-size: 16px;
-    line-height: 22px;
 }
 
 @mixin yourWillh3 {
@@ -101,179 +105,121 @@ export default {
     margin: 0px;
 }
 
-@mixin yourWillinput {
-    border-radius: 10px;
-    display: block;
-    background-color: #eeeeee;
-    border-radius: 10px;
-    width: 100%;
-    border: 2px solid black;
-    font-size: 16px;
-    line-height: 21px;
-    padding: 10px 15px 10px;
-    margin-top: 20px;
-
-    &:focus {
-        outline: none;
-        box-shadow: none;
-    }
-}
-
-@mixin nextButton {
-    margin: 40px auto;
-    display: block;
-    padding: 10px 20px;
-    color: black;
-    background-color: #eeeeee;
-    border-radius: 10px;
-    border: 2px solid black;
-
-    &:focus {
-        box-shadow: none;
-        outline: none;
-    }
-}
-
-@mixin selectOption {
-    width: 100%;
-    padding: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-    background-color: #eeeeee;
-
-    &:focus {
-        box-shadow: none;
-        outline: none;
-    }
-}
-
-@mixin radioOption {
-    display: flex;
-    border-radius: 10px;
-    align-items: center;
-    border: 2px solid black;
-    margin-bottom: 5px;
-    padding: 5px 0;
-
-    input {
-        margin: 0;
-        height: 20px;
-        width: 10%;
-        display: inline;
-    }
-
-    label {
-        margin: 0;
-    }
-}
-
-$color-orange-0: #f9a825;
-
-.yourWill {
-    background-image: url(./../../public/img/anh-nen-toi-hoa-van-cho-dien-thoai_101025691.jpg);
-    padding: 0 300px;
-
-    .yourWill__content {
-        padding-top: 100px;
-
-        .colorSection {
-            @include colorSection;
-        }
-
-        h1 {
-            @include yourWillh1;
-            margin-top: 50px;
-        }
-
-        h3 {
-            @include yourWillh3;
-            margin-top: 50px;
-        }
-
-        .radioh3 {
-            @include yourWillh3;
-        }
-
-        p {
-            @include yourWillp;
-            margin-top: 50px;
-        }
-
-        input {
-            @include yourWillinput;
-        }
-
-        button {
-            @include nextButton;
-        }
-
-        select {
-            @include selectOption;
-        }
-
-        .radioOption {
-            @include radioOption;
-        }
-
-        textarea {
-            width: 100%;
-        }
-
-        #account,
-        #hasChild,
-        #guardian,
-        #yesAlternate,
-        #personalAlternate,
-        #haveRequests {
-            border: 2px solid black;
-            margin-top: 60px;
-            padding: 20px;
-            padding-top: 50px;
-            border-radius: 10px;
-            position: relative;
-
-            h3 {
-                @include yourWillh3;
-                position: absolute;
+.payment {
+    width: 100vh;
+    width: 100vw;
+    background-image: url(../../public/img/anh-nen-toi-hoa-van-cho-dien-thoai_101025691.jpg);
+    .payment__content {
+        padding: 100px 150px;
+        .payment__left__col {
+            .userWill {
+                position: relative;
+                height: 100vh;
                 background-color: white;
-                top: 0;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                border: 2px solid black;
-                padding: 10px;
-                width: 30%;
-            }
-        }
-
-        .yourWillPage {
-            // border-radius: 10px;
-            border: 2px solid black;
-            padding: 0 150px;
-            background-color: white;
-            margin-bottom: 20px;
-
-            #childrenTab,
-            #guardianPersonal,
-            #alternateGuardian,
-            #personalGuardian,
-            #requests {
-                border: 0;
-
-                li {
-                    padding: 5px;
-                    width: 50%;
-
-                    a {
-                        border: 2px solid black;
-                        color: black;
+                .willHeader {
+                    background-color: $color-orange-0;
+                    padding: 20px 50px;
+                    border-bottom: 2px solid black;
+                    h1 {
+                        @include yourWillh1;
+                        text-align: left;
+                        font-size: 60px;
                     }
-
-                    .active {
-                        background-color: #eeeeee;
+                    h3 {
+                        @include yourWillh3;
+                        text-align: left;
+                    }
+                }
+                .willBody {
+                    display: block;
+                    padding: 50px;
+                    .bodyContent {
+                        height: 100%;
+                        .bodyFooter {
+                            position: absolute;
+                            bottom: 0;
+                            right: 0;
+                            left: 0;
+                            padding: 0 50px;
+                            i {
+                                margin-top: 20px;
+                                font-size: 50px;
+                                margin-left: 400px;
+                                margin-bottom: 50px;
+                            }
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@media screen and (max-width: 576px) {
+    .payment {
+        .payment__content {
+            padding: 70px 50px;
+            .payment__left__col {
+                .userWill {
+                    .willHeader {
+                        padding: 10px 30px;
+                        h1 {
+                            font-size: 35px;
+                            margin-bottom: 5px;
+                        }
+                    }
+                    .willBody {
+                        padding: 30px;
+                        .bodyContent {
+                            p {
+                                font-size: 13px;
+                            }
+                            .bodyFooter {
+                                padding: 0 30px;
+                                i {
+                                    font-size: 40px;
+                                    margin-left: 150px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+   .payment {
+        .payment__content {
+            padding: 70px 100px;
+            .payment__left__col {
+                .userWill {
+                    .willHeader {
+                        padding: 10px 30px;
+                        h1 {
+                            font-size: 40px;
+                            margin-bottom: 10px;
+                        }
+                    }
+                    .willBody {
+                        padding: 30px;
+                        .bodyContent {
+                            p {
+                                font-size: 15px;
+                            }
+                            .bodyFooter {
+                                padding: 0 30px;
+                                i {
+                                    font-size: 40px;
+                                    margin-left: 300px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } 
 }
 </style>
