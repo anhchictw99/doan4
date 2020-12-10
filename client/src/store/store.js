@@ -48,7 +48,8 @@ export default new Vuex.Store({
         signChangepass:'',
         signRelaseen:'',
         signDeleteuser:'',
-       // signSortstate:''
+       // signSortstate:'',
+       signLastcheck:''
 
 
 
@@ -602,17 +603,26 @@ export default new Vuex.Store({
                 })
                 .catch(err => console.log(err))
         },
-        // sortState({ commit }) {
-        //     axios
-        //         .get('http://localhost:3000/admin/sortState', { headers: { Authorization: 'Bearer ' + localStorage.getItem("token") } })
-        //         .then(result => {
-        //             console.log(result)
+        lastCheck({ commit },data) {
+            axios
+                .put('http://localhost:3000/user/lastCheck/',data)
+                .then(result => {
+                    var mess = result.data.mess
+                    
+                  
 
-        //             commit('SORTSTATE', { result: result.data.kq })
+                    commit('LASTCHECK', mess)
+                    router.push('/login')
 
-        //         })
-        //         .catch(err => console.log(err))
-        // },
+                })
+                .catch((err) => {
+                    Swal.fire(
+                        'đã fail',
+                        'cập nhật thất bại',
+                        'error'
+                    )
+                    console.log(err)})
+        },
         sortState({ commit }) {
             
 
@@ -739,6 +749,9 @@ export default new Vuex.Store({
             
             var signSort = state.signStatical.filter( item => item.state == 'yes'|| item.state =='seen')
             state.signStatical = signSort
+        },
+        LASTCHECK(state, data) {
+            state.signLastcheck = data
         },
 
 

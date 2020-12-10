@@ -6,6 +6,7 @@ import Payment from "@/components/Payment";
 import EditRelative from "@/components/EditRelative";
 import EditUser from "@/components/EditUser";
 import Will from "@/components/Will";
+import LastCheck from "@/components/LastCheck";
 import ResetPass from "@/components/ResetPass";
 import ForgotPass from "@/components/ForgotPass";
 import AdminLogin from "@/components/AdminLogin";
@@ -123,6 +124,11 @@ export default new Router({
 				requiresAuth: true 
 			},
 			component: Witnesses,
+		},
+		{
+			path: "/lastCheck/:id",
+			name: "LastCheck",
+			component: LastCheck,
 		},
 	],
 });
